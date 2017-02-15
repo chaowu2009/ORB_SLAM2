@@ -36,9 +36,9 @@ using namespace cv;
 
 int main(int argc, char **argv)
 {
-    if(argc != 4)
+    if(argc != 3)
     {
-        cerr << endl << "Usage: ./stereo_kitti path_to_vocabulary path_to_settings path_to_sequence" << endl;
+        cerr << endl << "Usage: ./stereo_chao path_to_vocabulary path_to_settings path_to_sequence" << endl;
         return 1;
     }
 
@@ -89,12 +89,15 @@ int main(int argc, char **argv)
        left_capture.read(imLeft);
        right_capture.read(imRight);
 
-        double tframe = vTimestamps[ni];
+        imshow("imLeft", imLeft);
+        imshow("imright", imRight);
+
+        clock_t begin = clock();
+        double tframe = begin; //vTimestamps[ni];
 
         if(imLeft.empty())
         {
-            cerr << endl << "Failed to load image at: "
-                 << string(vstrImageLeft[ni]) << endl;
+            cerr << endl << "Failed to load image at: "<< endl;
             return 1;
         }
 
@@ -126,6 +129,8 @@ int main(int argc, char **argv)
 
         if(ttrack<T)
             usleep((T-ttrack)*1e6);
+
+        waitKey(2);
     }
 
     // Stop all threads
