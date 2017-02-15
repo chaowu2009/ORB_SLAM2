@@ -89,10 +89,11 @@ int main(int argc, char **argv)
        left_capture.read(imLeft);
        right_capture.read(imRight);
 
-        imshow("imLeft", imLeft);
-        imshow("imright", imRight);
+     //   imshow("imLeft", imLeft);
+     //   imshow("imright", imRight);
 
         clock_t begin = clock();
+        begin  = double(begin)/CLOCKS_PER_SEC;
         double tframe = begin; //vTimestamps[ni];
 
         if(imLeft.empty())
