@@ -96,7 +96,6 @@ add_executable(stereo_euroc
 Examples/Stereo/stereo_euroc.cc)
 target_link_libraries(stereo_euroc ${PROJECT_NAME})
 
-
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/Examples/Monocular)
 
 add_executable(mono_tum
@@ -110,4 +109,11 @@ target_link_libraries(mono_kitti ${PROJECT_NAME})
 add_executable(mono_euroc
 Examples/Monocular/mono_euroc.cc)
 target_link_libraries(mono_euroc ${PROJECT_NAME})
+
+# real time capture
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/Examples/Chao)
+
+add_executable(stereo_chao
+Examples/Chao/stereo_chao.cc)
+target_link_libraries(stereo_chao ${PROJECT_NAME})
 

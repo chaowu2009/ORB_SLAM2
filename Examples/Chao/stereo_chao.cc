@@ -31,9 +31,8 @@
 #include<System.h>
 
 using namespace std;
+using namespace cv;
 
-void LoadImages(const string &strPathToSequence, vector<string> &vstrImageLeft,
-                vector<string> &vstrImageRight, vector<double> &vTimestamps);
 
 int main(int argc, char **argv)
 {
@@ -47,7 +46,7 @@ int main(int argc, char **argv)
     vector<string> vstrImageLeft;
     vector<string> vstrImageRight;
     vector<double> vTimestamps;
-    LoadImages(string(argv[3]), vstrImageLeft, vstrImageRight, vTimestamps);
+ //   LoadImages(string(argv[3]), vstrImageLeft, vstrImageRight, vTimestamps);
 
     const int nImages = vstrImageLeft.size();
 
@@ -64,11 +63,32 @@ int main(int argc, char **argv)
 
     // Main loop
     cv::Mat imLeft, imRight;
-    for(int ni=0; ni<nImages; ni++)
+
+#define LEFT 1
+#define RIGHT 2
+
+    int WIDTH = 640;
+    int HEIGHT = 480;
+
+    VideoCapture left_capture(LEFT);
+    left_capture.set(CV_CAP_PROP_FRAME_WIDTH, WIDTH);
+    left_capture.set(CV_CAP_PROP_FRAME_HEIGHT, HEIGHT);
+
+    VideoCapture right_capture(RIGHT);
+    right_capture.set(CV_CAP_PROP_FRAME_WIDTH, WIDTH);
+    right_capture.set(CV_CAP_PROP_FRAME_HEIGHT, HEIGHT);
+
+//    for(int ni=0; ni<nImages; ni++)
+    int ni = 0;
+    while (1)
     {
+       ni++;
         // Read left and right images from file
-        imLeft = cv::imread(vstrImageLeft[ni],CV_LOAD_IMAGE_UNCHANGED);
-        imRight = cv::imread(vstrImageRight[ni],CV_LOAD_IMAGE_UNCHANGED);
+        //imLeft = cv::imread(vstrImageLeft[ni],CV_LOAD_IMAGE_UNCHANGED);
+        //imRight = cv::imread(vstrImageRight[ni],CV_LOAD_IMAGE_UNCHANGED);
+       left_capture.read(imLeft);
+       right_capture.read(imRight);
+
         double tframe = vTimestamps[ni];
 
         if(imLeft.empty())
@@ -128,38 +148,3 @@ int main(int argc, char **argv)
     return 0;
 }
 
-void LoadImages(const string &strPathToSequence, vector<string> &vstrImageLeft,
-                vector<string> &vstrImageRight, vector<double> &vTimestamps)
-{
-    ifstream fTimes;
-    string strPathTimeFile = strPathToSequence + "/times.txt";
-    fTimes.open(strPathTimeFile.c_str());
-    while(!fTimes.eof())
-    {
-        string s;
-        getline(fTimes,s);
-        if(!s.empty())
-        {
-            stringstream ss;
-            ss << s;
-            double t;
-            ss >> t;
-            vTimestamps.push_back(t);
-        }
-    }
-
-    string strPrefixLeft = strPathToSequence + "/image_0/";
-    string strPrefixRight = strPathToSequence + "/image_1/";
-
-    const int nTimes = vTimestamps.size();
-    vstrImageLeft.resize(nTimes);
-    vstrImageRight.resize(nTimes);
-
-    for(int i=0; i<nTimes; i++)
-    {
-        stringstream ss;
-        ss << setfill('0') << setw(6) << i;
-        vstrImageLeft[i] = strPrefixLeft + ss.str() + ".png";
-        vstrImageRight[i] = strPrefixRight + ss.str() + ".png";
-    }
-}
