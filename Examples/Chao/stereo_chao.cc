@@ -79,10 +79,10 @@ int main(int argc, char **argv)
     right_capture.set(CV_CAP_PROP_FRAME_HEIGHT, HEIGHT);
 
 //    for(int ni=0; ni<nImages; ni++)
-    int ni = 0;
+  //  int ni = 0;
     while (1)
     {
-       ni++;
+  //     ni++;
         // Read left and right images from file
         //imLeft = cv::imread(vstrImageLeft[ni],CV_LOAD_IMAGE_UNCHANGED);
         //imRight = cv::imread(vstrImageRight[ni],CV_LOAD_IMAGE_UNCHANGED);
@@ -119,17 +119,17 @@ int main(int argc, char **argv)
 
         double ttrack= std::chrono::duration_cast<std::chrono::duration<double> >(t2 - t1).count();
 
-        vTimesTrack[ni]=ttrack;
+        //vTimesTrack[ni]=ttrack;
 
         // Wait to load the next frame
         double T=0;
-        if(ni<nImages-1)
-            T = vTimestamps[ni+1]-tframe;
-        else if(ni>0)
-            T = tframe-vTimestamps[ni-1];
+       // if(ni<nImages-1)
+       //     T = vTimestamps[ni+1]-tframe;
+       // else if(ni>0)
+       //     T = tframe-vTimestamps[ni-1];
 
-        if(ttrack<T)
-            usleep((T-ttrack)*1e6);
+       // if(ttrack<T)
+       //     usleep((T-ttrack)*1e6);
 
         waitKey(2);
     }
@@ -138,11 +138,11 @@ int main(int argc, char **argv)
     SLAM.Shutdown();
 
     // Tracking time statistics
-    sort(vTimesTrack.begin(),vTimesTrack.end());
+   // sort(vTimesTrack.begin(),vTimesTrack.end());
     float totaltime = 0;
     for(int ni=0; ni<nImages; ni++)
     {
-        totaltime+=vTimesTrack[ni];
+   //     totaltime+=vTimesTrack[ni];
     }
     cout << "-------" << endl << endl;
     cout << "median tracking time: " << vTimesTrack[nImages/2] << endl;
